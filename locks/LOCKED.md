@@ -885,3 +885,13 @@ When a fix works, append it here, one block per fix: UTC time, what failed or wo
   Never the main node's process or data, never Mini.
 ```
 
+```
+- 2026-11-14T04:00:57Z: the disposable v2.1.0 node (started with --rpcmaxclients=4 and --maxinpeers=0) negotiated protocol 11,
+  started IBD with a headers proof, received all 251 proof chunks (98,454 headers, 25,807 unique), then panicked in
+  pruning_proof/validate.rs:120: fd budget "Exceeded upper bound, acquired: 8185, limit: 8192". kaspad's DB budget is the fd
+  limit (8,192 on Windows) minus rpc clients, inbound and outbound peers; with tiny limits the DBs take almost all of it and
+  the 10-file temp DB for proof validation cannot open. Data dir (0.04 GB) deleted by the guard. Retry 1 with the defaults
+  for both flags (loopback-only listening still keeps inbound out). Stays: do not shrink rpcmaxclients/maxinpeers on a
+  syncing node.
+```
+
