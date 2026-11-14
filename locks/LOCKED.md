@@ -864,3 +864,11 @@ When a fix works, append it here, one block per fix: UTC time, what failed or wo
 
 When a fix works, append it here, one block per fix: UTC time, what failed or worked, what was changed, why that change stays.
 
+```
+- 2026-11-14T03:12Z: inside and crossing spends rejected for fee: v2.1.0 prices the fee on normalized transient mass
+  (4 x byte size), which the SDK mass call does not return. Fee now on 2 x SDK mass for this shape; both then accepted.
+  Stays: for script-heavy transactions, price the fee on the transient mass, not the SDK mass.
+- 2026-11-14T03:13Z: a 170-input spend at SDK mass 103,526 was accepted and landed: 100,000 is not a mempool limit on this
+  node. Crossing retried at 840 inputs, over the block compute mass 500,000 the plan cites.
+```
+

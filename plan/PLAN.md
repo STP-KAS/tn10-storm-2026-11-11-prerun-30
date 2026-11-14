@@ -21,3 +21,9 @@ Funding for the pair: 173 coins of 5 tKAS from key 0 to our own P2SH script (865
 - Inside (3 inputs): accepted.
 - Crossing (170 inputs): rejected by mempool standardness on mass (100,000), not by a consensus limit; the 170 inputs come back as unspent and are recovered.
 - ZK: `not met`, reason `no artifact, build declined`: a search of the desk and the guest image found source files only, no receipt.
+
+## Addendum before retry 1 of the crossing (written 03:15Z, before its submit)
+
+What happened (03:12Z): the first inside and crossing submits were both rejected for **fee**, not mass: v2.1.0 asks the fee on the "normalized transient mass (proportional to transaction byte size)", which the SDK mass call did not return (3,532 against SDK 2,324 for 3 inputs; 183,892 against 103,526 for 170). With the fee priced on 2× the SDK mass, the inside spend (3 inputs) was **accepted** and the 170-input spend was **accepted** too (both landed). Our prediction of a 100,000 standard-mass limit was wrong: on this node that size is not a limit. The crossing did not cross anything published.
+
+Retry 1, one change: the crossing size is set over a limit the plan actually cites, block compute mass 500,000: **840 inputs**, SDK mass about 509,000, transient about 909,000 (under 1,000,000), storage mass small (a consolidation). 840 coins of 5 tKAS are funded from key 0 first (4,200 tKAS held at our script for minutes) and recovered to key 0 in batches of 50 afterwards. Prediction: rejected, with a message naming mass. Pass as written in the card: inside accepted (done), crossing rejected with its error string kept.

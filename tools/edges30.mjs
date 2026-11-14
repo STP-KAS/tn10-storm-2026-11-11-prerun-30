@@ -25,7 +25,9 @@ const spk = k.payToScriptHashScript(redeem); const PADDR = k.addressFromScriptPu
 const p2shTx = (ents, fee) => { const tot = ents.reduce((s, e) => s + BigInt(e.amount), 0n);
   const ins = ents.map((e) => ({ address: PADDR, outpoint: { transactionId: e.outpoint.transactionId, index: e.outpoint.index }, utxoEntry: { amount: BigInt(e.amount), scriptPublicKey: spk, blockDaaScore: BigInt(e.blockDaaScore ?? 0), isCoinbase: false } }));
   const t = k.createTransaction(ins, [{ address: A0, amount: tot - fee }], 0n, null, 0); for (const i of t.inputs) i.signatureScript = sigScript; return t; };
-const priced = (ents) => { const m = massOf(p2shTx(ents, 100000n)); const fee = BigInt(m) * 100n + 1000n; const t = p2shTx(ents, fee); return { t, mass: massOf(t), fee }; };
+// 03:12Z fix: v2.1.0 asks the fee on the normalized transient mass (4 x byte size), which the SDK mass call does not return;
+// for this shape it is 1.5-1.8 x the SDK mass, so the fee is priced on 2 x the SDK mass (100 sompi/gram).
+const priced = (ents) => { const m = massOf(p2shTx(ents, 100000n)); const fee = BigInt(m) * 200n + 1000n; const t = p2shTx(ents, fee); return { t, mass: massOf(t), fee }; };
 const cbTx = () => new k.Transaction({ version: 0, inputs: [], outputs: [new k.TransactionOutput(100000000n, k.payToAddressScript(A0))], lockTime: 0n, subnetworkId: "0100000000000000000000000000000000000000", gas: 0n, payload: "70333020636f696e62617365" });
 if (has("dry")) {
   const dummy = (n) => Array.from({ length: n }, (_, i) => ({ amount: 500000000n, outpoint: { transactionId: crypto.randomBytes(32).toString("hex"), index: i }, blockDaaScore: 0 }));
