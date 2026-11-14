@@ -1,12 +1,12 @@
 > **Experimental. We are just trying this.** [Disclaimer](DISCLAIMER.md) · Counts only.
 
-# Playbook, pre-run 30 (no-disk part)
+# Playbook, pre-run 30
 
 Roles: the desk runs the one probe script against its own private node; the box writes this repo; Mini is not used.
 
 ## Disk floor (written before the checks)
 
-Desk and Mini 100 GB free, box 20 GB. Below that, nothing starts. No compile. Nothing in this pre-run creates node data.
+Desk and Mini 100 GB free, box 20 GB. Below that, nothing starts. No compile. The edge checks create no node data. The IBD part (added after the operator's reversal) has its own floor: the disposable node is stopped and deleted if desk free space falls below 150 GB.
 
 ## Status before the first submit (UTC)
 
@@ -22,3 +22,11 @@ Desk and Mini 100 GB free, box 20 GB. Below that, nothing starts. No compile. No
 - Coinbase rejected 03:11:56Z; inside accepted 03:12:49Z; 170-input spend accepted 03:12:57Z; crossing (840 inputs) rejected 03:14:16Z at the transient limit; 17 recoveries accepted by 03:15Z, 0 coins left at our script.
 - Desk node 03:15Z: synced, DAA moved 101 in 10 s, 8 peers, mempool 0. Key 0: 3,381 coins over 3 tKAS, 85,742 usable tKAS. Desk 340 GB free.
 - Left idle: no runner on the desk, Mini or the bot; no guest container running.
+
+## IBD part (UTC)
+
+- 04:00:57Z first start (small RPC/inbound limits) panicked in proof validation; the guard deleted its directory (0.04 GB).
+- 04:03:29Z retry 1 started with the defaults for those two flags; desk 340.7 GB free; main node untouched.
+- 06:03:13Z synced; 06:04:31Z same virtual DAA and pruning point as the main node.
+- 06:05:14Z stop file; 06:05:19Z directory 46.21 GB; 06:05:20Z directory deleted, desk 341 GB free. No disposable process left; its ports closed.
+- Pre-run 28 not run: elevation `Access is denied.` on desk and Mini (scheduled task, highest run level, 04:07Z). No firewall change.

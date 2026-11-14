@@ -1,6 +1,7 @@
 # ibd30.ps1 (pre-run 30 IBD part). TESTNET-10 ONLY. A disposable kaspad (a copy of the existing v2.1.0 binary) in its own data
 # directory and its own loopback ports, syncing from scratch. Retry 1 (04:05Z): default --rpcmaxclients and --maxinpeers (see LOCKED). Guard every 30 s: desk free below 150 GB -> stop and delete;
 # deadline -> stop and delete. Never touches the main node (pid 3196) or its data directory. Logs to the run dir only.
+# Ports are written as placeholders in this public copy; the private copy on the desk holds the real ones.
 param([string]$Deadline = '2026-11-14T06:20:00Z')
 $ErrorActionPreference = 'Continue'
 $R = 'C:\Users\Fermi\tn10-storm-2026-10-30\prerun-30-ibd'; $A = 'C:\kaspa-tn10-ibd-p30'; $EXE = "$A\bin\kaspad.exe"
@@ -14,13 +15,13 @@ New-Item -ItemType Directory "$A\bin", "$R\logs" -Force | Out-Null
 Copy-Item 'C:\Users\Fermi\Documents\kaspa\groks-wallet\bin\v2.1.0\kaspad.exe' $EXE -Force
 $f0 = FreeGB; L "START free_gb=$f0 floor=150 deadline=$Deadline"
 if ($f0 -lt 160) { L "REFUSE free below 160 GB at start"; exit 2 }
-$p = Start-Process -FilePath $EXE -ArgumentList @("--appdir=$A\data", '--testnet', '--netsuffix=10', '--disable-upnp', '--listen=127.0.0.1:26211', '--rpclisten=127.0.0.1:26210', '--rpclisten-borsh=127.0.0.1:27210', '--outpeers=8', '--ram-scale=0.5') -WindowStyle Hidden -PassThru -RedirectStandardOutput "$R\logs\kaspad-ibd.out" -RedirectStandardError "$R\logs\kaspad-ibd.err"
+$p = Start-Process -FilePath $EXE -ArgumentList @("--appdir=$A\data", '--testnet', '--netsuffix=10', '--disable-upnp', '--listen=127.0.0.1:<p2p-port>', '--rpclisten=127.0.0.1:<grpc-port>', '--rpclisten-borsh=127.0.0.1:<wrpc-port>', '--outpeers=8', '--ram-scale=0.5') -WindowStyle Hidden -PassThru -RedirectStandardOutput "$R\logs\kaspad-ibd.out" -RedirectStandardError "$R\logs\kaspad-ibd.err"
 $p.Id | Set-Content "$R\logs\ibd.pid"; L "KASPAD_START pid=$($p.Id) (disposable; main node pid 3196 untouched)"
 $why = 'deadline'
 while ($true) {
   Start-Sleep 30
   $fr = FreeGB; $dg = DirGB
-  $j = (& $NODE "$R\ibdprobe.mjs" $SDK 27210 2>$null | Select-Object -Last 1)
+  $j = (& $NODE "$R\ibdprobe.mjs" $SDK <wrpc-port> 2>$null | Select-Object -Last 1)
   if (-not $j) { $j = '{}' }
   $alive = [bool](Get-Process -Id $p.Id -EA 0)
   $line = $j.TrimEnd('}') + $(if ($j -ne '{}') { ',' } else { '' }) + "`"free_gb`":$fr,`"dir_gb`":$dg,`"alive`":$($alive.ToString().ToLower())}"

@@ -14,7 +14,7 @@ Desk private node, kaspad 2.1.0 (testnet-10, synced, never restarted). One scrip
 | 03:14:16 | Script mass, crossing (retry 1) | 840 inputs, SDK mass 509,546 | `Rejected transaction <id>: transaction transient (storage) mass of 1814984 is larger than max allowed size of 1000000` | **rejected** at the transient limit (1,000,000), before the compute limit we aimed at |
 | 03:15 | Recovery | the 840 coins back to key 0, 17 transactions of 50 inputs (SDK mass 30,806 each) | all accepted, 0 left at our script | — |
 | — | ZK (#953) | nothing: no receipt file on the desk or in the tic-tac-toe guest image (source files about receipts only) | — | **not met**: no artifact, build declined |
-| — | IBD (#1136) | nothing: no disposable node tonight (operator decision) | — | not run |
+| 04:03–06:05 | IBD (#1136) | a disposable fresh v2.1.0 node on the desk, own data dir and loopback ports (retry 1) | synced from nothing in 1 h 59 min 44 s; same virtual DAA and pruning point as the main node | **met** ([IBD.md](IBD.md)) |
 
 Script used for the pair: redeem script one 480-byte data push, DROP, TRUE (485 bytes; signature script 488 bytes, push-only); P2SH output 35 bytes. Far under `max_script_public_key_len` 10,000 and `MAX_SIGNATURE_SCRIPT_LEN` 250,000. Per input: SDK mass about 606; the node's normalized transient mass for the fee about 1,082 (170 inputs); the transient mass checked against 1,000,000 about 2,161 per input (840 inputs).
 

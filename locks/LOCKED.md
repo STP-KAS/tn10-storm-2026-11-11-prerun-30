@@ -895,3 +895,12 @@ When a fix works, append it here, one block per fix: UTC time, what failed or wo
   syncing node.
 ```
 
+
+```
+- 2026-11-14T06:03:13Z: IBD retry 1 (default rpcmaxclients/maxinpeers, loopback-only listening) synced from nothing in
+  1 h 59 min 44 s: headers 12 min, UTXO set 49 min receive + 25 min import (337,848,503 entries), blocks 27 min.
+  Same virtual DAA and pruning point as the main node at 06:04:31Z. Directory 46.21 GB, deleted 06:05:20Z.
+  Stays: budget about 2 hours and about 50 GB for a fresh TN10 node on the desk.
+- 2026-11-14T04:07Z: elevation for pre-run 28 tried on desk and Mini (scheduled task, RunLevel Highest): "Access is denied."
+  on both. Pre-run 28 not run; no firewall change.
+```
