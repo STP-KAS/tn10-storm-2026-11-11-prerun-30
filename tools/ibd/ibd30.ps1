@@ -3,15 +3,15 @@
 # deadline -> stop and delete. Never touches the main node (pid 3196) or its data directory. Logs to the run dir only.
 param([string]$Deadline = '2026-11-14T06:20:00Z')
 $ErrorActionPreference = 'Continue'
-$R = 'C:\Users\Remco\tn10-storm-2026-10-30\prerun-30-ibd'; $A = 'C:\kaspa-tn10-ibd-p30'; $EXE = "$A\bin\kaspad.exe"
-$NODE = 'node'; $SDK = (Get-Content 'C:\Users\Remco\tn10-storm-2026-10-30\prerun-30-desk\config.json' -Raw | ConvertFrom-Json).kaspa_sdk
+$R = 'C:\Users\Fermi\tn10-storm-2026-10-30\prerun-30-ibd'; $A = 'C:\kaspa-tn10-ibd-p30'; $EXE = "$A\bin\kaspad.exe"
+$NODE = 'node'; $SDK = (Get-Content 'C:\Users\Fermi\tn10-storm-2026-10-30\prerun-30-desk\config.json' -Raw | ConvertFrom-Json).kaspa_sdk
 $LOG = "$R\logs\ibd-guard.log"; $PJ = "$R\logs\ibd-progress.jsonl"
 function L($m) { Add-Content $LOG ((Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ') + ' ' + $m) }
 function FreeGB { [math]::Round((Get-PSDrive C).Free / 1GB, 1) }
 function DirGB { if (Test-Path $A) { [math]::Round(((Get-ChildItem $A -Recurse -File -EA 0 | Measure-Object Length -Sum).Sum) / 1GB, 2) } else { 0 } }
 if ($A -eq 'C:\kaspa-tn10-private' -or $A -notlike 'C:\kaspa-tn10-ibd-p30*') { L 'REFUSE wrong appdir'; exit 2 }
 New-Item -ItemType Directory "$A\bin", "$R\logs" -Force | Out-Null
-Copy-Item 'C:\Users\Remco\Documents\kaspa\groks-wallet\bin\v2.1.0\kaspad.exe' $EXE -Force
+Copy-Item 'C:\Users\Fermi\Documents\kaspa\groks-wallet\bin\v2.1.0\kaspad.exe' $EXE -Force
 $f0 = FreeGB; L "START free_gb=$f0 floor=150 deadline=$Deadline"
 if ($f0 -lt 160) { L "REFUSE free below 160 GB at start"; exit 2 }
 $p = Start-Process -FilePath $EXE -ArgumentList @("--appdir=$A\data", '--testnet', '--netsuffix=10', '--disable-upnp', '--listen=127.0.0.1:26211', '--rpclisten=127.0.0.1:26210', '--rpclisten-borsh=127.0.0.1:27210', '--rpcmaxclients=4', '--outpeers=8', '--maxinpeers=0', '--ram-scale=0.5') -WindowStyle Hidden -PassThru -RedirectStandardOutput "$R\logs\kaspad-ibd.out" -RedirectStandardError "$R\logs\kaspad-ibd.err"
