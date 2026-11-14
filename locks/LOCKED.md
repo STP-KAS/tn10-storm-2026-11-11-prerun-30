@@ -879,3 +879,9 @@ When a fix works, append it here, one block per fix: UTC time, what failed or wo
   3 tKAS after.
 ```
 
+```
+- (xxxi-b) IBD part (04:46 Brussels reversal by TN10 ops): disposable kaspad copy of v2.1.0, own data dir C:\kaspa-tn10-ibd-...,
+  loopback-only ports, no inbound, no mining; guard: free < 150 GB -> stop and delete; deadline 06:20Z -> stop and delete.
+  Never the main node's process or data, never Mini.
+```
+
