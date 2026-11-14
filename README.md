@@ -12,10 +12,10 @@
 |---|---|
 | Target | the three no-disk checks of the [target plan](https://github.com/STP-KAS/tn10-target-plan/blob/main/plan/PLAN.md)'s pre-run 30 card, each met, not met, or skipped with a written reason: coinbase rejection (#1137), the script-mass pair, ZK receipt verify (#953). IBD (#1136) is not run tonight: the operator decided no disposable node and nothing that grows disk |
 | The change | none to the load: no families, no lane, no guest. Single, labelled submits on the desk's private node only ([plan/PLAN.md](plan/PLAN.md)) |
-| Met or not met | open: written after the checks |
-| Retry count | 0 |
+| Met or not met | coinbase **met**; script-mass pair **met** (inside accepted; crossing rejected at the transient mass limit 1,000,000, on retry 1); ZK **not met** (no artifact, build declined); IBD not run ([counts/EDGES.md](counts/EDGES.md), [LESSONS](logs/LESSONS.md)) |
+| Retry count | 1 (the crossing: fee on transient mass, then 840 inputs instead of 170; written before its submit) |
 | Core tags | 8 (broader stress of v2.1.0: coinbase rejection, script units / mass, ZK SDK) |
-| Status | in-progress |
+| Status | done (2026-11-14, checks 03:11–03:15Z) |
 
 **Why not 27, 28 or 29 first.** Pre-run 27 waits for a binary with the November RPC merges (none exists without compiling). Pre-run 28 needs a desk–Mini peer link and a host filter, left for the operator. The operator chose the no-disk part of 30 as tonight's fallback. Reasons are in [tn10-target-plan retry-log](https://github.com/STP-KAS/tn10-target-plan/blob/main/retry-log/README.md).
 

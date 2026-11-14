@@ -49,7 +49,7 @@ const pcoins = async () => ((await to(rpc.getUtxosByAddresses({ addresses: [PADD
 if (arg("fund")) {
   const N = Number(arg("fund")), EACH = BigInt(Math.round(Number(arg("each", "5")) * 1e8)), PER = Number(arg("per", "20"));
   const lines = fs.readFileSync(CFG.keys_file, "utf8").trim().split(/\r?\n/).map((s) => s.trim()).filter(Boolean); const pk0 = new k.PrivateKey(lines[0]);
-  const bag = ((await to(rpc.getUtxosByAddresses({ addresses: [A0] }), 90000)).entries || []).filter((e) => !e.isCoinbase && BigInt(e.amount) >= 20_000_000_000n && BigInt(e.amount) <= 100_000_000_000n);
+  const bag = ((await to(rpc.getUtxosByAddresses({ addresses: [A0] }), 90000)).entries || []).filter((e) => !e.isCoinbase && BigInt(e.amount) >= BigInt(Math.round(Number(arg("minin", "200")) * 1e8)) && BigInt(e.amount) <= 100_000_000_000n);
   let made = 0, i = 0, fees = 0n, txs = 0;
   while (made < N && i < bag.length) {
     const n = Math.min(PER, N - made); const ins = []; let acc = 0n; while (acc < EACH * BigInt(n) + 100_000_000n && i < bag.length) { ins.push(bag[i]); acc += BigInt(bag[i].amount); i++; }

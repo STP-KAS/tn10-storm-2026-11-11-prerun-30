@@ -872,3 +872,10 @@ When a fix works, append it here, one block per fix: UTC time, what failed or wo
   node. Crossing retried at 840 inputs, over the block compute mass 500,000 the plan cites.
 ```
 
+```
+- 2026-11-14T03:14:16Z: crossing retry 1 (840 inputs, SDK mass 509,546) rejected: transient (storage) mass 1,814,984 over
+  1,000,000. For signature-script-heavy spends the transient limit binds first. Stays.
+- Result: coinbase met; script-mass pair met; ZK not met (no artifact, build declined); IBD not run. Key 0 3,381 coins over
+  3 tKAS after.
+```
+
